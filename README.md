@@ -6,6 +6,20 @@ camera with crop functionality
 npm install rn-camera-crop
 ```
 
+or
+
+```sh
+yarn add rn-camera-crop
+```
+
+#### Note
+This library depends upon expo. If you're using it on a bare react-native project, please setup expo first.
+
+Afer successfully setting up the expo install the peer dependencies-
+```sh
+expo-cli install expo-camera expo-image-manipulator
+```
+
 ## Usage
 
 ```tsx
@@ -28,6 +42,12 @@ const onError = (error: Error) => {
     onCaptureSuccess={onSuccess}
     onCaptureError={onError}/>
 ```
+
+If you are getting this error ``Could not find com.google.android:cameraview:1.0.0`` while building your project.
+Try to add this line-
+``android/build.gradle`` at the bottom of allprojects -> repositories
+
+``maven { url "$rootDir/../node_modules/expo-camera/android/maven" }``
 
 ## Contributing
 
