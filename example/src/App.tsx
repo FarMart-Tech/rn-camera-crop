@@ -1,31 +1,33 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'rn-camera-crop';
+import { StyleSheet, View } from 'react-native';
+import CameraModule from 'rn-camera-crop';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const onSuccess = (uri: string) => {
+    console.log(uri);
+  };
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  const onError = (error: Error) => {
+    console.error(error.message);
+  };
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <CameraModule
+        enablePreview
+        enableCrop
+        rectType="A4"
+        onCaptureSuccess={onSuccess}
+        onCaptureError={onError}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
   },
 });
