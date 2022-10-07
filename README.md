@@ -8,12 +8,25 @@ npm install rn-camera-crop
 
 ## Usage
 
-```js
-import { multiply } from "rn-camera-crop";
+```tsx
+import CameraModule from "rn-camera-crop";
 
 // ...
 
-const result = await multiply(3, 7);
+const onSuccess = (uri: string) => {
+    // do whatever you want
+}
+
+const onError = (error: Error) => {
+    // do whatever you want
+}
+
+<CameraModule
+    rectType='A4'
+    enableCrop
+    enablePreview
+    onCaptureSuccess={onSuccess}
+    onCaptureError={onError}/>
 ```
 
 ## Contributing
@@ -23,7 +36,3 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 ## License
 
 MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
