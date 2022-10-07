@@ -33,10 +33,30 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "camera",
+    "image",
+    "crop",
+    "image-crop",
+    "camera-crop",
+    "camera-image-crop",
+    "react-native-image",
+    "react-native-image-crop",
+    "react-native-camera-crop"
   ],
   "repository": "https://github.com/sandeepkumarmishra354/rn-camera-crop",
-  "author": "sandeep mishra <sandeepkumarmishra354@gmail.com> (https://github.com/sandeepkumarmishra354)",
+  "contributors": [
+    {
+      "name": "Deepak Mishra",
+      "email": "deepak@email.com",
+      "url": "https://github.com/skilp4d"
+    },
+    {
+      "name": "Sandeep Mishra",
+      "email": "sandeepkumarmishra354@gmail.com",
+      "url": "https://github.com/sandeepkumarmishra354"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sandeepkumarmishra354/rn-camera-crop/issues"
@@ -58,6 +78,8 @@
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "expo-camera": "^12.3.0",
+    "expo-image-manipulator": "^10.4.0",
     "jest": "^28.1.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
@@ -71,6 +93,9 @@
     "@types/react": "17.0.21"
   },
   "peerDependencies": {
+    "expo": "*",
+    "expo-camera": "*",
+    "expo-image-manipulator": "*",
     "react": "*",
     "react-native": "*"
   },
