@@ -6,6 +6,9 @@ import {
 import { Camera, CameraType, FlashMode, CameraCapturedPicture } from 'expo-camera'
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
+const DEFAULT_QUALITY_CROP = 0.95;
+const DEFAULT_QUALITY_NORMAL = 0.6;
+
 export interface ICameraPreviewProps {
     /**
      * Default: ``back``
@@ -34,6 +37,11 @@ export interface ICameraPreviewProps {
      * Default: ``true``
      */
     enablePreview?: boolean,
+    /**
+     * Default: ``0.6``
+     * when rect is enabled: ``0.95``
+     */
+    imageQuality?: number,
     onClosePress?: () => void,
     /**
      * Called after photo captured (and cropped) successfully.
@@ -102,8 +110,14 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                 .then(photo => {
                     if (shouldCrop)
                         cropPhoto(photo);
-                    else
-                        props.onCaptureSuccess(photo.uri);
+                    else {
+                        manipulateAsync(photo.uri, [], {
+                            compress: props.imageQuality ?? DEFAULT_QUALITY_NORMAL,
+                            format: SaveFormat.JPEG, base64: false
+                        }).then(result => {
+                            props.onCaptureSuccess(result.uri);
+                        }).catch(props.onCaptureError)
+                    }
                 }).catch(err => {
                     props.onCaptureError(err);
                 });
@@ -131,7 +145,7 @@ const CameraPreview = (props: ICameraPreviewProps) => {
             manipulateAsync(
                 photo.uri,
                 [{ crop: cropRect }],
-                { compress: 0.95, format: SaveFormat.JPEG }
+                { compress: props.imageQuality ?? DEFAULT_QUALITY_CROP, format: SaveFormat.JPEG }
             ).then(result => {
                 props.onCaptureSuccess(result.uri);
             }).catch(err => {

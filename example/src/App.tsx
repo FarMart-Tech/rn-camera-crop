@@ -16,10 +16,11 @@ export default function App() {
     <View style={styles.container}>
       <CameraModule
         enablePreview
+        rectType='A4'
         enableCrop
-        rectType="A4"
         onCaptureSuccess={onSuccess}
         onCaptureError={onError}
+        imageQuality={0.6}
       />
     </View>
   );

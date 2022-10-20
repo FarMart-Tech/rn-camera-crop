@@ -129,7 +129,7 @@
     }
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "parser": "@babel/eslint-parser",
     "extends": [
       "@react-native-community",
