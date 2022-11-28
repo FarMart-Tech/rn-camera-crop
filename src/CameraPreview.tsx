@@ -57,6 +57,7 @@ export type CameraPermissionState = {
 }
 
 const CameraPreview = (props: ICameraPreviewProps) => {
+    console.log("init commit")
     const _cameraRef = React.useRef<Camera>(null);
     const [rectLayout, setRectLayout] = React.useState<LayoutRectangle>();
 
