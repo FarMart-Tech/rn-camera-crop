@@ -168,13 +168,15 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                     {rectLayout && <View style={rectStyle} />}
                 </View>
             </Camera>
-            <TouchableNativeFeedback onPress={onCapturePress}>
-                <View style={styles.captureButton}>
-                    <Text style={styles.captureText}>
-                        CAPTURE
-                    </Text>
-                </View>
-            </TouchableNativeFeedback>
+            <View style={styles.captureButtonContainer}>
+                <TouchableNativeFeedback onPress={onCapturePress}>
+                    <View style={styles.captureButton}>
+                        <Text style={styles.captureText}>
+                            CAPTURE
+                        </Text>
+                    </View>
+                </TouchableNativeFeedback>
+            </View>
         </View>
     );
 }
@@ -187,6 +189,11 @@ const styles = StyleSheet.create({
     },
     camera: {
         aspectRatio: 9 / 16
+    },
+    captureButtonContainer:{
+        position:'absolute',
+        bottom:30,
+        alignSelf:'center'
     },
     overlayView: {
         flex: 1,
