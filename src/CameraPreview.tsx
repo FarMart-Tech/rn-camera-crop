@@ -128,25 +128,19 @@ const CameraPreview = (props: ICameraPreviewProps) => {
         if (rectLayout) {
             const { width } = photo;
             const { height } = photo;
-            // const viewH = (rectLayout.height + 2 * rectLayout.y);
-            // const viewW = (rectLayout.width + 2 * rectLayout.x);
-            // const fx = width / viewW;
-            // const fy = height / viewH;
-            // const cropHeight = fy * rectLayout.height;
-            // const cropWidth = fx * rectLayout.width;
-            // const cropX = fx * rectLayout.x;
-            // const cropY = fy * rectLayout.y;
+            const viewH = (rectLayout.height + 2 * rectLayout.y);
+            const viewW = (rectLayout.width + 2 * rectLayout.x);
+            const fx = width / viewW;
+            const fy = height / viewH;
+            const cropHeight = fy * rectLayout.height;
+            const cropWidth = fx * rectLayout.width;
+            const cropX = fx * rectLayout.x;
+            const cropY = fy * rectLayout.y;
             const cropRect = {
-                // width: cropWidth,
-                // height: cropHeight,
-                // originX: cropX,
-                // originY: cropY
-
-                //*********** */ after disable Image cropping***********
-                width: width,
-                height: height,
-                originX: 0,
-                originY: 0
+                width: cropWidth,
+                height: cropHeight,
+                originX: cropX,
+                originY: cropY
             };
             manipulateAsync(
                 photo.uri,
