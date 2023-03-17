@@ -6,7 +6,7 @@ import {
 import { Camera, CameraType, FlashMode, CameraCapturedPicture } from 'expo-camera'
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
-const DEFAULT_QUALITY_CROP = 0.95;
+const DEFAULT_QUALITY_CROP = 1.0;
 const DEFAULT_QUALITY_NORMAL = 0.6;
 
 export interface ICameraPreviewProps {
