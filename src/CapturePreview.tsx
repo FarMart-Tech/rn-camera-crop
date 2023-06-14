@@ -1,15 +1,16 @@
+import type { ImageResult } from "expo-image-manipulator";
 import React from "react";
 import { StyleSheet, View, TouchableNativeFeedback, Text, Image } from "react-native";
 
 export interface ICapturePreviewProps {
-    uri: string,
+    imageResult: ImageResult,
     onRetakePress: () => void,
     onAcceptPress: () => void
 }
 
 const CapturePreview = (props: ICapturePreviewProps) => (
     <View style={styles.main}>
-        <Image style={styles.image} source={{ uri: props.uri }} />
+        <Image style={styles.image} source={{ uri: props.imageResult.uri }} />
         <View style={styles.actionRow}>
             <TouchableNativeFeedback onPress={props.onRetakePress}>
                 <View style={[styles.captureButton, { backgroundColor: "#B4161B" }]}>
