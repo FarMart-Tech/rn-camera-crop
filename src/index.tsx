@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from "react-native";
 import { Camera, PermissionStatus } from 'expo-camera';
 import CameraPreview, { CameraPermissionState, ICameraPreviewProps } from "./CameraPreview";
 import CapturePreview, { ICapturePreviewProps } from "./CapturePreview";
+import type { ImageResult } from "expo-image-manipulator";
 
 export interface ICameraModuleProps extends ICameraPreviewProps { }
 
@@ -11,7 +12,7 @@ const CameraModule = (props: ICameraModuleProps) => {
         granted: false,
         error: null
     });
-    const [previewUri, setPreviewUri] = React.useState<string>();
+    const [imageResult, setImageResult] = React.useState<ImageResult>();
     // preview default--> true.
     const enablePreview = props.enablePreview ?? true;
 
@@ -32,21 +33,21 @@ const CameraModule = (props: ICameraModuleProps) => {
     }
 
     const onPreviewRetake = React.useCallback(() => {
-        setPreviewUri(undefined);
+        setImageResult(undefined);
     }, []);
 
     const onPreviewAccept = React.useCallback(() => {
-        if (previewUri) {
-            props.onCaptureSuccess(`${previewUri}`);
-            setPreviewUri(undefined);
+        if (imageResult?.uri) {
+            props.onCaptureSuccess(imageResult);
+            setImageResult(undefined);
         }
-    }, [previewUri]);
+    }, [imageResult?.uri]);
 
-    const onCaptureSuccess = React.useCallback((uri: string) => {
+    const onCaptureSuccess = React.useCallback((imageResult: ImageResult) => {
         if (enablePreview)
-            setPreviewUri(uri);
+        setImageResult(imageResult);
         else
-            props.onCaptureSuccess(uri);
+            props.onCaptureSuccess(imageResult);
     }, [enablePreview]);
 
     const onCaptureError = React.useCallback((error: Error) => {
@@ -55,9 +56,9 @@ const CameraModule = (props: ICameraModuleProps) => {
 
     const Content = React.useMemo(() => {
         if (cameraPermission.granted) {
-            if (enablePreview && previewUri) {
+            if (enablePreview && imageResult?.uri) {
                 return <CapturePreview
-                    uri={previewUri}
+                    imageResult={imageResult}
                     onAcceptPress={onPreviewAccept}
                     onRetakePress={onPreviewRetake} />;
             }
@@ -74,7 +75,7 @@ const CameraModule = (props: ICameraModuleProps) => {
             </Text>);
 
         return null;
-    }, [cameraPermission, previewUri, enablePreview]);
+    }, [cameraPermission, imageResult?.uri, enablePreview]);
 
     return (
         <View style={styles.main}>

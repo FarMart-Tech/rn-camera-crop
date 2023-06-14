@@ -1,11 +1,12 @@
+import type { ImageResult } from 'expo-image-manipulator';
 import * as React from 'react';
 
 import { StyleSheet, View } from 'react-native';
 import CameraModule from 'rn-camera-crop';
 
 export default function App() {
-  const onSuccess = (uri: string) => {
-    console.log(uri);
+  const onSuccess = (imageResult: ImageResult) => {
+    console.log(imageResult);
   };
 
   const onError = (error: Error) => {
@@ -17,7 +18,7 @@ export default function App() {
       <CameraModule
         enablePreview
         rectType='A4'
-        enableCrop
+        enableCrop={false}
         onCaptureSuccess={onSuccess}
         onCaptureError={onError}
         imageQuality={0.6}

@@ -4,7 +4,7 @@ import {
     LayoutRectangle, TouchableNativeFeedback, Text, StyleProp, ViewStyle
 } from "react-native";
 import { Camera, CameraType, FlashMode, CameraCapturedPicture } from 'expo-camera'
-import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+import { ImageResult, manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
 const DEFAULT_QUALITY_CROP = 1.0;
 const DEFAULT_QUALITY_NORMAL = 0.6;
@@ -47,7 +47,7 @@ export interface ICameraPreviewProps {
      * Called after photo captured (and cropped) successfully.
      * In case if preview is enabled this method will be called after preview is accepted.
      */
-    onCaptureSuccess: (uri: string) => void,
+    onCaptureSuccess: (imageResult: ImageResult) => void,
     onCaptureError: (error: Error) => void,
 }
 
@@ -115,7 +115,7 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                             compress: props.imageQuality ?? DEFAULT_QUALITY_NORMAL,
                             format: SaveFormat.JPEG, base64: false
                         }).then(result => {
-                            props.onCaptureSuccess(result.uri);
+                            props.onCaptureSuccess(result);
                         }).catch(props.onCaptureError)
                     }
                 }).catch(err => {
@@ -147,7 +147,8 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                 [{ crop: cropRect }],
                 { compress: props.imageQuality ?? DEFAULT_QUALITY_CROP, format: SaveFormat.JPEG }
             ).then(result => {
-                props.onCaptureSuccess(result.uri);
+                console.log("result is",result)
+                props.onCaptureSuccess(result);
             }).catch(err => {
                 props.onCaptureError(err);
             });
