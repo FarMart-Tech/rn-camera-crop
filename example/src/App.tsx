@@ -22,7 +22,7 @@ export default function App() {
         onCaptureSuccess={onSuccess}
         onCaptureError={onError}
         imageQuality={0.6}
-      />
+        cropName={'maize'} />
     </View>
   );
 }
