@@ -88,7 +88,7 @@ const CameraPreview = (props: ICameraPreviewProps) => {
         let centerX = width / 2
         let centerY = height / 2
         cropName = findBestMatch(props.cropName)
-        console.log("scale is", scaleEnums[cropName], "cropName", cropName)
+
         let radius = scaleEnums[cropName] * width / 2
         let recX = centerX - radius
         let recY = centerY - radius
