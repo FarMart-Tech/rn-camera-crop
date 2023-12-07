@@ -1,11 +1,13 @@
 import React from "react";
 import {
     StyleSheet, View, LayoutChangeEvent,
-    LayoutRectangle, TouchableNativeFeedback, Text, StyleProp, ViewStyle
+    LayoutRectangle, TouchableNativeFeedback, Text, StyleProp, ViewStyle, Dimensions
 } from "react-native";
 import { Camera, CameraType, FlashMode, CameraCapturedPicture } from 'expo-camera'
 import { ImageResult, manipulateAsync, SaveFormat } from 'expo-image-manipulator';
-
+const { width, height } = Dimensions.get("window")
+//@ts-ignore
+import { findBestMatch, scaleEnums, circleFrameTypeCrops } from './utils/constants'
 const DEFAULT_QUALITY_CROP = 1.0;
 const DEFAULT_QUALITY_NORMAL = 0.6;
 
@@ -49,6 +51,7 @@ export interface ICameraPreviewProps {
      */
     onCaptureSuccess: (imageResult: ImageResult) => void,
     onCaptureError: (error: Error) => void,
+    cropName: string
 }
 
 export type CameraPermissionState = {
@@ -61,8 +64,9 @@ const CameraPreview = (props: ICameraPreviewProps) => {
     const [rectLayout, setRectLayout] = React.useState<LayoutRectangle>();
 
     const shouldCrop = ((props.rectType || props.customRect) && props.enableCrop);
+    let cropName = findBestMatch(props.cropName)
 
-    const rectStyle = React.useMemo((): StyleProp<ViewStyle> | undefined => {
+    const regionStyle = React.useMemo((): StyleProp<ViewStyle> | undefined => {
         if (rectLayout) {
             let borderWidth = 5;
             let borderColor = "#4DD637";
@@ -81,12 +85,33 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                 borderColor
             };
         }
-        return undefined;
+        let centerX = width / 2
+        let centerY = height / 2
+        cropName = findBestMatch(props.cropName)
+
+        let radius = scaleEnums[cropName] * width / 2
+        let recX = centerX - radius
+        let recY = centerY - radius
+
+
+        return {
+            position: 'absolute',
+            left: recX,
+            top: recY,
+            width: 2 * radius,
+            height: 2 * radius,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            borderWidth: 5,
+            borderRadius: radius,
+            borderColor: "black"
+        }
     }, [rectLayout, props.rectStyle]);
 
     const onLayoutChange = (event: LayoutChangeEvent) => {
         // default to A4 for now.
-        if (props.rectType) {
+        let isCircle = circleFrameTypeCrops.includes(cropName)
+        if (!isCircle) {
             const { width, height } = event.nativeEvent.layout;
             const recWidth = 0.8 * width;
             const recHeight = 1.4142 * recWidth;
@@ -101,6 +126,8 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                     y: recY
                 });
             }
+        } else {
+            setRectLayout(undefined)
         }
     }
 
@@ -147,7 +174,7 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                 [{ crop: cropRect }],
                 { compress: props.imageQuality ?? DEFAULT_QUALITY_CROP, format: SaveFormat.JPEG }
             ).then(result => {
-                console.log("result is",result)
+                console.log("result is", result)
                 props.onCaptureSuccess(result);
             }).catch(err => {
                 props.onCaptureError(err);
@@ -166,7 +193,7 @@ const CameraPreview = (props: ICameraPreviewProps) => {
                 <View
                     style={styles.overlayView}
                     onLayout={onLayoutChange}>
-                    {rectLayout && <View style={rectStyle} />}
+                    <View style={regionStyle} />
                 </View>
             </Camera>
             <View style={styles.captureButtonContainer}>
@@ -191,10 +218,10 @@ const styles = StyleSheet.create({
     camera: {
         aspectRatio: 9 / 16
     },
-    captureButtonContainer:{
-        position:'absolute',
-        bottom:30,
-        alignSelf:'center'
+    captureButtonContainer: {
+        position: 'absolute',
+        bottom: 30,
+        alignSelf: 'center'
     },
     overlayView: {
         flex: 1,
